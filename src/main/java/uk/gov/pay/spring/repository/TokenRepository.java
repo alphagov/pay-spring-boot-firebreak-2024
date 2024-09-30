@@ -1,6 +1,7 @@
-package uk.gov.pay.spring.dao;
+package uk.gov.pay.spring.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import uk.gov.pay.spring.dao.TokenEntity;
 import uk.gov.pay.spring.model.TokenSource;
 import uk.gov.pay.spring.model.TokenState;
 

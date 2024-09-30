@@ -1,5 +1,6 @@
 package uk.gov.pay.spring.resource;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import uk.gov.pay.spring.dao.TokenEntity;
-import uk.gov.pay.spring.dao.TokenRepository;
+import uk.gov.pay.spring.repository.TokenRepository;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -38,15 +39,25 @@ class TokenResourceIT {
     @BeforeEach
     void setUp() {
         IntStream.rangeClosed(1,3).forEach(accountId -> {
-            // set up state revoked with api token source
             tokenRepository.save(new TokenEntity((long) accountId, UUID.randomUUID().toString(), ZonedDateTime.now(), REVOKED, API));
-            // set up state revoked with products token source
             tokenRepository.save(new TokenEntity((long) accountId, UUID.randomUUID().toString(), ZonedDateTime.now(), REVOKED, PRODUCTS));
-            // set up state active with products token source
             tokenRepository.save(new TokenEntity((long) accountId, UUID.randomUUID().toString(), ZonedDateTime.now(), ACTIVE, PRODUCTS));
-            // set up state active with api token source
             tokenRepository.save(new TokenEntity((long) accountId, UUID.randomUUID().toString(), ZonedDateTime.now(), ACTIVE, API));
         });
+    }
+
+    @AfterEach
+    void tearDown() {
+        tokenRepository.deleteAll();
+    }
+
+    @Test
+    void getAllTokens() throws Exception {
+        mvc.perform(get("/v1/token").queryParam("accountIds", "1", "2", "3")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(jsonPath("$.length()", is(12)));
     }
 
     @Test

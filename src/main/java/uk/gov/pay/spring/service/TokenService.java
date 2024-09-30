@@ -2,7 +2,7 @@ package uk.gov.pay.spring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.pay.spring.dao.TokenRepository;
+import uk.gov.pay.spring.repository.TokenRepository;
 import uk.gov.pay.spring.model.Token;
 import uk.gov.pay.spring.model.TokenSource;
 import uk.gov.pay.spring.model.TokenState;

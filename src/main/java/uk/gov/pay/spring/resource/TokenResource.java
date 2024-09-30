@@ -31,6 +31,4 @@ public class TokenResource {
                                                        @PathVariable("tokenSource")TokenSource tokenSource) {
         return ResponseEntity.ok().body(tokenService.findByTokenStateAndTokenSource(tokenState, tokenSource));
     }
-
-    //search
 }

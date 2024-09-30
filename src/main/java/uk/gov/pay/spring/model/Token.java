@@ -9,7 +9,7 @@ public record Token (
     Long id,
     Long accountId,
     String token,
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") ZonedDateTime issuedDate,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm") ZonedDateTime issuedDate,
     TokenState tokenState,
     TokenSource tokenSource) {
 
