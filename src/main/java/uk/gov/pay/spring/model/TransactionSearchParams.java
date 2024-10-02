@@ -1,6 +1,9 @@
 package uk.gov.pay.spring.model;
 
+import jakarta.persistence.criteria.Join;
+import jakarta.validation.Valid;
 import org.springframework.data.jpa.domain.Specification;
+import uk.gov.pay.spring.dao.PayoutEntity;
 import uk.gov.pay.spring.dao.TransactionEntity;
 
 import java.time.ZonedDateTime;
@@ -17,8 +20,18 @@ public class TransactionSearchParams {
     private final String cardBrand;
     private final ZonedDateTime fromDate;
     private final ZonedDateTime toDate;
+    private final ZonedDateTime fromSettledDate;
+    private final ZonedDateTime toSettledDate;
 
-    public TransactionSearchParams(List<Long> accountIds, String email, String reference, String cardHolderName, String cardBrand, ZonedDateTime fromDate, ZonedDateTime toDate) {
+    public TransactionSearchParams(List<Long> accountIds,
+                                   String email,
+                                   String reference,
+                                   String cardHolderName,
+                                   String cardBrand,
+                                   ZonedDateTime fromDate,
+                                   ZonedDateTime toDate,
+                                   ZonedDateTime fromSettledDate,
+                                   ZonedDateTime toSettledDate) {
         this.accountIds = accountIds;
         this.email = email;
         this.reference = reference;
@@ -26,6 +39,8 @@ public class TransactionSearchParams {
         this.cardBrand = cardBrand;
         this.fromDate = fromDate;
         this.toDate = toDate;
+        this.fromSettledDate = fromSettledDate;
+        this.toSettledDate = toSettledDate;
     }
 
     public Specification<TransactionEntity> buildSpecification() {
@@ -64,6 +79,22 @@ public class TransactionSearchParams {
         if (isNotBlank(cardBrand)) {
             specification = specification.and((Specification<TransactionEntity>) (root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("cardBrand"), cardBrand));
+        }
+
+        if (fromSettledDate != null) {
+            specification = specification.and((Specification<TransactionEntity>) (root, query, criteriaBuilder) ->
+            {
+                Join<TransactionEntity, PayoutEntity> payoutEntityJoin = root.join("payout");
+                return criteriaBuilder.greaterThan(payoutEntityJoin.get("paidOutDate"), fromSettledDate);
+            });
+        }
+
+        if (toSettledDate != null) {
+            specification = specification.and((Specification<TransactionEntity>) (root, query, criteriaBuilder) ->
+            {
+                Join<TransactionEntity, PayoutEntity> payoutEntityJoin = root.join("payout");
+                return criteriaBuilder.lessThan(payoutEntityJoin.get("paidOutDate"), toSettledDate);
+            });
         }
 
         return specification;

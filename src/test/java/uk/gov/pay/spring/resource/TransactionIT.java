@@ -34,14 +34,20 @@ public class TransactionIT {
     @BeforeEach
     void setUp() {
         // gateway account id 1
-        transactionRepository.save(new TransactionEntity(1L, "river.cartwright@sloughhouse.com", "ABCD123", "River Cartwright", "Visa", ZonedDateTime.now()));
-        transactionRepository.save(new TransactionEntity(1L, "cat.standish@sloughhouse.com", "ABC1235", "Catherine Standish", "Visa", ZonedDateTime.now().minusHours(6)));
-        transactionRepository.save(new TransactionEntity(1L, "sid.baker@sloughhouse.com", "AB12356", "Sid Baker", "Visa", ZonedDateTime.now().minusHours(12)));
+        transactionRepository.save(new TransactionEntity(1L, "river.cartwright@sloughhouse.com",
+                "ABCD123", "River Cartwright", "Visa", ZonedDateTime.now(), null));
+        transactionRepository.save(new TransactionEntity(1L, "cat.standish@sloughhouse.com",
+                "ABC1235", "Catherine Standish", "Visa", ZonedDateTime.now().minusHours(6), null));
+        transactionRepository.save(new TransactionEntity(1L, "sid.baker@sloughhouse.com",
+                "AB12356", "Sid Baker", "Visa", ZonedDateTime.now().minusHours(12), null));
 
         // gateway account id 2
-        transactionRepository.save(new TransactionEntity(2L, "hermione.granger@hp.com", "ABCD123", "Hermione Granger", "Mastercard", ZonedDateTime.now()));
-        transactionRepository.save(new TransactionEntity(2L, "mundungus.fletcher@hp.com", "1234XYZ", "Mundungus Fletcher", "American Express", ZonedDateTime.now().minusHours(6)));
-        transactionRepository.save(new TransactionEntity(2L, "death.eater@hp.com", "134XYZZ", "Death Eater", "American Express", ZonedDateTime.now().minusHours(12)));
+        transactionRepository.save(new TransactionEntity(2L, "hermione.granger@hp.com",
+                "ABCD123", "Hermione Granger", "Mastercard", ZonedDateTime.now(), null));
+        transactionRepository.save(new TransactionEntity(2L, "mundungus.fletcher@hp.com",
+                "1234XYZ", "Mundungus Fletcher", "American Express", ZonedDateTime.now().minusHours(6), null));
+        transactionRepository.save(new TransactionEntity(2L, "death.eater@hp.com",
+                "134XYZZ", "Death Eater", "American Express", ZonedDateTime.now().minusHours(12), null));
     }
 
     @AfterEach

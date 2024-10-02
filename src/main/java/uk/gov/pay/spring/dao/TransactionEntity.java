@@ -1,9 +1,13 @@
 package uk.gov.pay.spring.dao;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 import java.time.ZonedDateTime;
 
@@ -19,16 +23,28 @@ public class TransactionEntity {
     private String cardHolderName;
     private String cardBrand;
     private ZonedDateTime createdDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private PayoutEntity payout;
 
     public TransactionEntity() {}
 
-    public TransactionEntity(Long accountId, String email, String reference, String cardHolderName, String cardBrand, ZonedDateTime createdDate) {
+    public TransactionEntity(Long accountId, String email, String reference, String cardHolderName, String cardBrand,
+                             ZonedDateTime createdDate, PayoutEntity payout) {
         this.accountId = accountId;
         this.email = email;
         this.reference = reference;
         this.cardHolderName = cardHolderName;
         this.cardBrand = cardBrand;
         this.createdDate = createdDate;
+        this.payout = payout;
+    }
+
+    public PayoutEntity getPayout() {
+        return payout;
+    }
+
+    public void setPayout(PayoutEntity payout) {
+        this.payout = payout;
     }
 
     public ZonedDateTime getCreatedDate() {

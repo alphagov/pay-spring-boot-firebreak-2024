@@ -30,8 +30,12 @@ public class TransactionResource {
             @RequestParam("cardHolderName") @Nullable String cardHolderName,
             @RequestParam("cardBrand") @Nullable String cardBrand,
             @RequestParam("fromDate") @Nullable @DateTimeFormat(pattern="dd-MM-yyyy HH:mm") @Valid ZonedDateTime fromDate,
-            @RequestParam("toDate") @Nullable @DateTimeFormat(pattern="dd-MM-yyyy HH:mm") @Valid ZonedDateTime toDate) {
-        TransactionSearchParams params = new TransactionSearchParams(accountIds, email, reference, cardHolderName, cardBrand, fromDate, toDate);
+            @RequestParam("toDate") @Nullable @DateTimeFormat(pattern="dd-MM-yyyy HH:mm") @Valid ZonedDateTime toDate,
+            @RequestParam("fromSettledDate") @Nullable @DateTimeFormat(pattern="dd-MM-yyyy HH:mm") @Valid ZonedDateTime fromSettledDate,
+            @RequestParam("toSettledDate") @Nullable @DateTimeFormat(pattern="dd-MM-yyyy HH:mm") @Valid ZonedDateTime toSettledDate) {
+
+        var params = new TransactionSearchParams(accountIds, email, reference, cardHolderName, cardBrand, fromDate,
+                toDate, fromSettledDate, toSettledDate);
         return ResponseEntity.ok().body(transactionService.findAll(params));
     }
 }
